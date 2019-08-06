@@ -1,22 +1,16 @@
 //
-//  File.swift
+//  StoreProviderModifier.swift
 //  
 //
-//  Created by Thomas Ricouard on 23/07/2019.
+//  Created by Majid Jabrayilov on 06/08/2019.
 //
 
 import SwiftUI
 
-public struct StoreProvider<S: FluxState, V: View>: View {
-    public let store: Store<S>
-    public let content: () -> V
-    
-    public init(store: Store<S>, content: @escaping () -> V) {
-        self.store = store
-        self.content = content
-    }
-    
-    public var body: some View {
-        content().environmentObject(store)
+public struct StoreProviderModifier<State: FluxState>: ViewModifier {
+    public let store: Store<State>
+
+    public func body(content: Content) -> some View {
+        content.environmentObject(store)
     }
 }
