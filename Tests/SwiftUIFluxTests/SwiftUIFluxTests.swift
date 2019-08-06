@@ -58,16 +58,17 @@ final class SwiftUIFluxTests: XCTestCase {
     }
     
     func testViewProps() {
-        let view = StoreProvider(store: store) {
-            HomeView()
-        }
+        let connectedView = ModifiedContent(
+            content: HomeView(),
+            modifier: StoreProviderModifier(store: store)
+        )
         store.dispatch(action: IncrementAction())
         DispatchQueue.main.async {
-            var props = view.content().map(state: self.store.state, dispatch: self.store.dispatch(action:))
+            var props = connectedView.content.map(state: self.store.state, dispatch: self.store.dispatch(action:))
             XCTAssert(props.count == 1, "View state is not correct")
             props.onIncrementCount()
             DispatchQueue.main.async {
-                props = view.content().map(state: self.store.state, dispatch: self.store.dispatch(action:))
+                props = connectedView.content.map(state: self.store.state, dispatch: self.store.dispatch(action:))
                 XCTAssert(props.count == 2, "View state is not correct")
             }
             
